@@ -1,4 +1,6 @@
-import neorun.Neuron;
+package io.github.therealmone;
+
+import io.github.therealmone.Neuron;
 
 import java.util.ArrayList;
 import java.util.Collections;
