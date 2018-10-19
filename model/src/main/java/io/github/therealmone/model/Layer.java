@@ -1,6 +1,4 @@
-package io.github.therealmone;
-
-import io.github.therealmone.Neuron;
+package io.github.therealmone.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
