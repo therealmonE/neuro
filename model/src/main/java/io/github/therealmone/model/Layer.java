@@ -1,14 +1,9 @@
-package io.github.therealmone;
-
-import io.github.therealmone.Neuron;
+package io.github.therealmone.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by Raymond on 19.09.2018.
- */
 public class Layer {
     private List<Neuron> neuronList = new ArrayList<>();
 
@@ -20,7 +15,15 @@ public class Layer {
         return Collections.unmodifiableList(neuronList);
     }
 
-    public void addNeuron(final Neuron neuron) {
+    public Layer addNeuron(final Neuron neuron) {
         neuronList.add(neuron);
+        return this;
+    }
+
+    public Layer addNeurons(final int count) {
+        for (int i = 0; i < count; i++) {
+            neuronList.add(new Neuron());
+        }
+        return this;
     }
 }
