@@ -2,9 +2,6 @@ package io.github.therealmone.model;
 
 import java.util.function.Function;
 
-/**
- * Created by Raymond on 19.09.2018.
- */
 public class Neuron {
     private Function<Double, Double> function;
     private double[] weights;
@@ -40,6 +37,7 @@ public class Neuron {
         for (int i = 0; i < inputs.length; i++) {
             sum += inputs[i] * weights[i];
         }
+
         double result = function.apply(sum);
 
         //todo: я не уверен, что theta вообще нужна, она нигде не упоминается...

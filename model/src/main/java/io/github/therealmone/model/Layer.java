@@ -14,7 +14,7 @@ public class Layer {
     public List<Neuron> getNeurons() {
         return Collections.unmodifiableList(neuronList);
     }
-
+  
     public Layer addNeuron(final Neuron neuron) {
         neuronList.add(neuron);
         return this;
