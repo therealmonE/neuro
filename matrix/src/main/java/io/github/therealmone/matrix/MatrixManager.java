@@ -44,4 +44,26 @@ public interface MatrixManager {
      * @return матрицу, суммированную со значением
      */
     Matrix add(Matrix matrix, Double value);
+
+    /**
+     *
+     * Возвращаем матрицу из массива данных
+     * Размеры выходной матрицы: array.length x 1
+     *
+     * @param array - массив
+     * @return матрицу из массива данных
+     */
+    Matrix fromArray(double[] array);
+
+
+    /**
+     *
+     * Возвращает матрицу размерночти rows X columns,
+     * заполненную случайными значениями от 0 до 1
+     *
+     * @param rows - количество строк
+     * @param columns - количество столбцов
+     * @return матрицу, заполненную случайными значениями
+     */
+    Matrix randomMatrix(final int rows, final int columns);
 }

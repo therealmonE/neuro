@@ -39,8 +39,6 @@ public class Neuron {
         }
 
         double result = function.apply(sum);
-
-        //todo: я не уверен, что theta вообще нужна, она нигде не упоминается...
         return result >= theta ? 1 : 0;
     }
 }

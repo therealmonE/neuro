@@ -1,38 +1,16 @@
 package io.github.therealmone.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public abstract class AbstractNeuralNetwork {
-    private Layer inputLayer;
-    private final List<Layer> hiddenLayers;
-    private Layer outputLayer;
+    private final Layer inputLayer;
+    private final Layer hiddenLayer;
+    private final Layer outputLayer;
 
     public AbstractNeuralNetwork() {
-        this.hiddenLayers = new ArrayList<>();
+        this.inputLayer = new Layer();
+        this.hiddenLayer = new Layer();
+        this.outputLayer = new Layer();
         configure();
         editConfig();
-    }
-
-    public Layer addInputLayer() {
-        if(inputLayer == null) {
-            inputLayer = new Layer();
-        }
-        return inputLayer;
-    }
-
-    public Layer addOutputLayer() {
-        if(outputLayer == null) {
-            outputLayer = new Layer();
-        }
-        return outputLayer;
-    }
-
-    public Layer addHiddenLayer() {
-        final Layer hiddenLayer = new Layer();
-        hiddenLayers.add(hiddenLayer);
-        return hiddenLayer;
     }
 
     public abstract void configure();
@@ -41,16 +19,12 @@ public abstract class AbstractNeuralNetwork {
         //override it
     }
 
-    public void feedForward(double ... inputs) {
-        //todo:
-    }
-
     public Layer getInputLayer() {
         return inputLayer;
     }
 
-    public List<Layer> getHiddenLayers() {
-        return Collections.unmodifiableList(hiddenLayers);
+    public Layer getHiddenLayer() {
+        return hiddenLayer;
     }
 
     public Layer getOutputLayer() {
