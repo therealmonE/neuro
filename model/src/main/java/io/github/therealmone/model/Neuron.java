@@ -32,6 +32,10 @@ public class Neuron {
         return this;
     }
 
+    public double[] getWeights(){
+        return this.weights;
+    }
+
     public int activate(final double ... inputs) {
         double sum = 0;
         for (int i = 0; i < inputs.length; i++) {
