@@ -1,5 +1,7 @@
 package io.github.therealmone.matrix.model;
 
+import java.util.Arrays;
+
 public class Matrix {
     private final Double[][] data;
 
@@ -37,7 +39,10 @@ public class Matrix {
 
     @Override
     public String toString() {
-        //todo:
-        return null;
+        final StringBuilder out = new StringBuilder();
+        for(final Double[] row : data) {
+            out.append(Arrays.toString(row)).append("\n");
+        }
+        return out.toString();
     }
 }

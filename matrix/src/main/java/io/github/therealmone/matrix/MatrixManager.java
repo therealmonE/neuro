@@ -1,5 +1,6 @@
 package io.github.therealmone.matrix;
 
+import com.sun.istack.internal.Nullable;
 import io.github.therealmone.matrix.model.Matrix;
 
 public interface MatrixManager {
@@ -23,6 +24,7 @@ public interface MatrixManager {
      * @param matrix - матрица
      * @return транспонированную матрицу
      */
+    @Nullable
     Matrix transpose(Matrix matrix);
 
     /**
