@@ -1,12 +1,10 @@
-package io.github.therealmone.xorProblem;
+package io.github.therealmone.trainer;
 
 import io.github.therealmone.model.AbstractNeuralNetwork;
 import io.github.therealmone.model.functions.SigmoidFunction;
 
-import java.util.Random;
-
-public class NeuralNetwork extends AbstractNeuralNetwork {
-
+//can solve xor
+public class TestNeuralNetwork extends AbstractNeuralNetwork {
     @Override
     public void configure() {
         getInputLayer().addNeurons(2).getNeurons().forEach(neuron ->

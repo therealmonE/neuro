@@ -1,6 +1,5 @@
 package io.github.therealmone.matrix.impl;
 
-import com.sun.istack.internal.Nullable;
 import io.github.therealmone.matrix.MatrixManager;
 import io.github.therealmone.matrix.model.Matrix;
 
@@ -8,7 +7,6 @@ import java.util.Random;
 
 public class MatrixManagerImpl implements MatrixManager {
     @Override
-    @Nullable
     public Matrix matrixProduct(final Matrix firstMatrix, final Matrix secondMatrix) {
         if(firstMatrix.getColumnCount() != secondMatrix.getRowCount()){
             return null;

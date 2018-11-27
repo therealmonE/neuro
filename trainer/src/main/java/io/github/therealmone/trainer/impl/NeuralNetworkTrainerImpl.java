@@ -1,6 +1,7 @@
 package io.github.therealmone.trainer.impl;
 
-import io.github.therealmone.matrix.impl.MatrixManagerImpl;
+import com.google.inject.Inject;
+import io.github.therealmone.matrix.MatrixManager;
 import io.github.therealmone.matrix.model.Matrix;
 import io.github.therealmone.model.AbstractNeuralNetwork;
 import io.github.therealmone.model.Layer;
@@ -8,41 +9,56 @@ import io.github.therealmone.model.Neuron;
 import io.github.therealmone.trainer.NeuralNetworkTrainer;
 import io.github.therealmone.trainer.TrainingFunction;
 
-import java.util.List;
-
 public class NeuralNetworkTrainerImpl implements NeuralNetworkTrainer {
-    @Override
-    public Matrix feedForward(final AbstractNeuralNetwork neuralNetwork, final Matrix inputs) {
-        Matrix outputs;
-        outputs = processNextLayer(neuralNetwork.getInputLayer(), inputs);
-        outputs = processNextLayer(neuralNetwork.getHiddenLayer(), outputs);
-        outputs = processNextLayer(neuralNetwork.getOutputLayer(), outputs);
+    private final MatrixManager matrixManager;
+    private final TrainingFunction trainingFunction;
 
-        return outputs;
+    @Inject
+    public NeuralNetworkTrainerImpl(final MatrixManager matrixManager, final TrainingFunction trainingFunction) {
+        this.matrixManager = matrixManager;
+        this.trainingFunction = trainingFunction;
     }
 
-    public Matrix processNextLayer(Layer layer, Matrix inputs){
-        Matrix outputs = new Matrix(layer.size());
-        List<Neuron> neuronsInLayer = layer.getNeurons();
-        for(int i = 0; i < layer.size(); i++){
-            double[] weights = neuronsInLayer.get(i).getWeights();
-            Matrix weightsMatrix = new Matrix(weights.length);
-            for(int k = 0; k < weights.length; k++){
-                weightsMatrix.setValue(k, weights[k]);
-            }
-            MatrixManagerImpl mmimp = new MatrixManagerImpl();
-            Matrix productedMatrix = mmimp.matrixProduct(inputs, weightsMatrix);
-            double[] productedArray = new double[productedMatrix.getRowCount()];
-            for (int k = 0; k < productedMatrix.getRowCount(); k++){
-                productedArray[k] = productedMatrix.getValue(k);
-            }
-            outputs.setValue(i,(double) neuronsInLayer.get(i).activate(productedArray));
+    @Override
+    public Matrix feedForward(final AbstractNeuralNetwork neuralNetwork, final Matrix inputs) {
+        return processNextLayer(neuralNetwork.getOutputLayer(),
+               processNextLayer(neuralNetwork.getHiddenLayer(),
+               processInputLayer(neuralNetwork.getInputLayer(), inputs)));
+    }
+
+    private Matrix processNextLayer(final Layer layer, final Matrix inputs) {
+        final Matrix weightMatrix = buildWeightMatrix(layer);
+        final Matrix matrixOfWeightedSum = matrixManager.matrixProduct(weightMatrix, inputs);
+
+        final Matrix outputs = new Matrix(layer.size());
+        for (int i = 0; i < layer.size(); i++) {
+            outputs.setValue(i, layer.getNeurons().get(i).activate(matrixOfWeightedSum.getValue(i)));
         }
         return outputs;
     }
 
+    //S-elements in this layer
+    private Matrix processInputLayer(final Layer layer, final Matrix inputs) {
+        final Matrix output = new Matrix(layer.size());
+        for (int i = 0; i < layer.size(); i++) {
+            final Neuron neuron = layer.getNeurons().get(i);
+            output.setValue(i, neuron.activate(inputs.getValue(i) * neuron.getWeights()[0]));
+        }
+        return output;
+    }
+
+    private Matrix buildWeightMatrix(final Layer layer) {
+        final Matrix weightMatrix = new Matrix(layer.size(), layer.getNeurons().get(0).getWeights().length);
+        for (int i = 0; i < layer.size(); i++) {
+            for (int j = 0; j < layer.getNeurons().get(i).getWeights().length; j++) {
+                weightMatrix.setValue(i, j, layer.getNeurons().get(i).getWeights()[j]);
+            }
+        }
+        return weightMatrix;
+    }
+
     @Override
-    public void train(final AbstractNeuralNetwork neuralNetwork, final TrainingFunction trainingFunction, final Matrix inputs, final Matrix targets) {
+    public void train(final AbstractNeuralNetwork neuralNetwork, final Matrix inputs, final Matrix targets) {
         trainingFunction.train(neuralNetwork, inputs, targets);
     }
 }

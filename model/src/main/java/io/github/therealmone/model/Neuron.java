@@ -36,13 +36,8 @@ public class Neuron {
         return this.weights;
     }
 
-    public int activate(final double ... inputs) {
-        double sum = 0;
-        for (int i = 0; i < inputs.length; i++) {
-            sum += inputs[i] * weights[i];
-        }
-
-        double result = function.apply(sum);
-        return result >= theta ? 1 : 0;
+    public double activate(final double weightedSum) {
+        double result = function.apply(weightedSum);
+        return result > theta ? 1 : 0;
     }
 }
