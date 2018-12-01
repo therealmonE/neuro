@@ -2,6 +2,8 @@ package io.github.therealmone.matrix;
 
 import io.github.therealmone.matrix.model.Matrix;
 
+import java.util.function.Function;
+
 public interface MatrixManager {
     /**
      *
@@ -15,6 +17,18 @@ public interface MatrixManager {
      * @return матричный продукт
      */
     Matrix matrixProduct(Matrix firstMatrix, Matrix secondMatrix);
+
+    /**
+     *
+     * Возвращает hadamard продукт от двух матриц
+     *
+     * Условие : размерности матриц должны совпадать
+     *
+     * @param firstMatrix - первая матрица
+     * @param secondMatrix - вторая матрица
+     * @return hadamard продукт
+     */
+    Matrix hadamardProduct(Matrix firstMatrix, Matrix secondMatrix);
 
     /**
      *
@@ -66,4 +80,14 @@ public interface MatrixManager {
      * @return матрицу, заполненную случайными значениями
      */
     Matrix randomMatrix(final int rows, final int columns);
+
+    /**
+     *
+     * Пропускает каждое значение в матрице через функцию
+     *
+     * @param matrix - матрица
+     * @param function - функция маппинга
+     * @return матрицу, значения которой были пропущены через функцию маппинга
+     */
+    Matrix map(final Matrix matrix, final Function<Double, Double> function);
 }

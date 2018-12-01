@@ -4,6 +4,7 @@ import io.github.therealmone.matrix.MatrixManager;
 import io.github.therealmone.matrix.model.Matrix;
 
 import java.util.Random;
+import java.util.function.Function;
 
 public class MatrixManagerImpl implements MatrixManager {
     @Override
@@ -23,6 +24,21 @@ public class MatrixManagerImpl implements MatrixManager {
             }
         }
         return matrixProduct;
+    }
+
+    @Override
+    public Matrix hadamardProduct(final Matrix firstMatrix, final Matrix secondMatrix) {
+        if(firstMatrix.getRowCount() != secondMatrix.getRowCount() || firstMatrix.getColumnCount() != secondMatrix.getColumnCount()) {
+            return null;
+        }
+
+        final Matrix hadamardProduct = new Matrix(firstMatrix.getRowCount(), firstMatrix.getColumnCount());
+        for (int i = 0; i < firstMatrix.getRowCount(); i++) {
+            for (int j = 0; j < firstMatrix.getColumnCount(); j++) {
+                hadamardProduct.setValue(i, j, firstMatrix.getValue(i, j) * secondMatrix.getValue(i, j));
+            }
+        }
+        return hadamardProduct;
     }
 
     @Override
@@ -77,5 +93,16 @@ public class MatrixManagerImpl implements MatrixManager {
             }
         }
         return matrix;
+    }
+
+    @Override
+    public Matrix map(final Matrix matrix, final Function<Double, Double> function) {
+        final Matrix mappedMatrix = new Matrix(matrix.getRowCount(), matrix.getColumnCount());
+        for (int i = 0; i < matrix.getRowCount(); i++) {
+            for (int j = 0; j < matrix.getColumnCount(); j++) {
+                mappedMatrix.setValue(i, j, function.apply(matrix.getValue(i, j)));
+            }
+        }
+        return mappedMatrix;
     }
 }

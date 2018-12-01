@@ -24,5 +24,5 @@ public interface NeuralNetworkTrainer {
      * @param inputs - матрица входных значений
      * @param targets - матрица целевых значений
      */
-    void train(final AbstractNeuralNetwork neuralNetwork, final Matrix inputs, final Matrix targets);
+    void train(final AbstractNeuralNetwork neuralNetwork, final Matrix inputs, final Matrix targets, final double learningRate);
 }

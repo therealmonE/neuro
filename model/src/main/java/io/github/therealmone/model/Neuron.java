@@ -5,11 +5,11 @@ import java.util.function.Function;
 public class Neuron {
     private Function<Double, Double> function;
     private double[] weights;
-    private double theta;
+    private double bias;
 
     public Neuron() {
         // default - 0
-        this.theta = 0;
+        this.bias = 0;
     }
 
     public Neuron setFunction(final Function<Double, Double> function) {
@@ -27,9 +27,13 @@ public class Neuron {
         return this;
     }
 
-    public Neuron setTheta(final double theta) {
-        this.theta = theta;
+    public Neuron setBias(final double bias) {
+        this.bias = bias;
         return this;
+    }
+
+    public double getBias() {
+        return bias;
     }
 
     public double[] getWeights(){
@@ -37,7 +41,6 @@ public class Neuron {
     }
 
     public double activate(final double weightedSum) {
-        double result = function.apply(weightedSum);
-        return result > theta ? 1 : 0;
+        return function.apply(weightedSum + bias);
     }
 }

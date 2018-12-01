@@ -3,7 +3,6 @@ package io.github.therealmone.trainer;
 import io.github.therealmone.matrix.MatrixManager;
 import io.github.therealmone.matrix.impl.MatrixManagerImpl;
 import io.github.therealmone.matrix.model.Matrix;
-import io.github.therealmone.trainer.impl.BackPropagationTrainingFunction;
 import io.github.therealmone.trainer.impl.NeuralNetworkTrainerImpl;
 import org.junit.Test;
 
@@ -12,8 +11,7 @@ import static org.junit.Assert.*;
 public class NeuralNetworkTrainerTest {
     private final TestNeuralNetwork testNeuralNetwork = new TestNeuralNetwork();
     private final MatrixManager matrixManager = new MatrixManagerImpl();
-    private final TrainingFunction trainingFunction = new BackPropagationTrainingFunction();
-    private final NeuralNetworkTrainer trainer = new NeuralNetworkTrainerImpl(matrixManager, trainingFunction);
+    private final NeuralNetworkTrainer trainer = new NeuralNetworkTrainerImpl(matrixManager);
 
     @Test
     public void feed_forward() {

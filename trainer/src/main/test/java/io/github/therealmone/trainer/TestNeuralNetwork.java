@@ -8,11 +8,10 @@ public class TestNeuralNetwork extends AbstractNeuralNetwork {
     @Override
     public void configure() {
         getInputLayer().addNeurons(2).getNeurons().forEach(neuron ->
-                neuron.setFunction(new SigmoidFunction())
-                        .setNumberOfInputs(2)
+                neuron.setFunction(x -> x)
+                        .setNumberOfInputs(1)
                         .setWeight(0, 1.0)
-                        .setWeight(1, 1.0)
-                        .setTheta(0.5));
+                        .setBias(0));
 
         getHiddenLayer().addNeurons(2);
 
@@ -21,20 +20,20 @@ public class TestNeuralNetwork extends AbstractNeuralNetwork {
                 .setWeight(0, 1.0)
                 .setWeight(1, -1.0)
                 .setFunction(new SigmoidFunction())
-                .setTheta(0.5);
+                .setBias(0);
 
         getHiddenLayer().getNeurons().get(1)
                 .setNumberOfInputs(2)
                 .setWeight(0, -1.0)
                 .setWeight(1, 1.0)
                 .setFunction(new SigmoidFunction())
-                .setTheta(0.5);
+                .setBias(0);
 
         getOutputLayer().addNeurons(1).getNeurons().forEach(neuron ->
                 neuron.setFunction(new SigmoidFunction())
                         .setNumberOfInputs(2)
                         .setWeight(0, 1.0)
                         .setWeight(1, 1.0)
-                        .setTheta(0.5));
+                        .setBias(0));
     }
 }

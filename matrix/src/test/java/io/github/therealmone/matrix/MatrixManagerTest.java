@@ -57,6 +57,34 @@ public class MatrixManagerTest {
         assertEquals(22.0, checkMatrix.getValue(1, 1), 0);
     }
 
+    @Test
+    public void hadamard_product() {
+        final Matrix firstMatrix = createMatrix();
+        final Matrix secondMatrix = createMatrix();
+        final Matrix checkMatrix = matrixManager.hadamardProduct(firstMatrix, secondMatrix);
+        assertNotSame(checkMatrix, firstMatrix);
+        assertNotSame(checkMatrix, secondMatrix);
+        assertEquals(2, checkMatrix.getRowCount());
+        assertEquals(2, checkMatrix.getColumnCount());
+        assertEquals(1.0, checkMatrix.getValue(0, 0), 0);
+        assertEquals(4.0, checkMatrix.getValue(0, 1), 0);
+        assertEquals(9.0, checkMatrix.getValue(1, 0), 0);
+        assertEquals(16.0, checkMatrix.getValue(1, 1), 0);
+    }
+
+    @Test
+    public void map() {
+        final Matrix matrix = createMatrix();
+        final Matrix checkMatrix = matrixManager.map(matrix, x -> x * 2);
+        assertNotSame(matrix, checkMatrix);
+        assertEquals(2, checkMatrix.getRowCount());
+        assertEquals(2, checkMatrix.getColumnCount());
+        assertEquals(2.0, checkMatrix.getValue(0, 0), 0);
+        assertEquals(4.0, checkMatrix.getValue(0, 1), 0);
+        assertEquals(6.0, checkMatrix.getValue(1, 0), 0);
+        assertEquals(8.0, checkMatrix.getValue(1, 1), 0);
+    }
+
     private Matrix createMatrix() {
         final Matrix matrix = new Matrix(2, 2);
         matrix.setValue(0, 0, 1.0);
