@@ -1,10 +1,13 @@
 package io.github.therealmone.model;
 
+import com.google.inject.Inject;
+
 public abstract class AbstractNeuralNetwork {
     private final Layer inputLayer;
     private final Layer hiddenLayer;
     private final Layer outputLayer;
 
+    @Inject
     public AbstractNeuralNetwork() {
         this.inputLayer = new Layer();
         this.hiddenLayer = new Layer();

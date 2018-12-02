@@ -1,20 +1,28 @@
 package io.github.therealmone.xorProblem;
 
+import com.google.inject.Inject;
 import io.github.therealmone.matrix.MatrixManager;
-import io.github.therealmone.matrix.impl.MatrixManagerImpl;
 import io.github.therealmone.matrix.model.Matrix;
+import io.github.therealmone.model.AbstractNeuralNetwork;
 import io.github.therealmone.trainer.NeuralNetworkTrainer;
-import io.github.therealmone.trainer.impl.NeuralNetworkTrainerImpl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class Application {
-    public static void main(String[] args) {
-        final MatrixManager matrixManager = new MatrixManagerImpl();
-        final NeuralNetwork neuralNetwork = new NeuralNetwork();
-        final NeuralNetworkTrainer trainer = new NeuralNetworkTrainerImpl(matrixManager);
+    private final AbstractNeuralNetwork neuralNetwork;
+    private final NeuralNetworkTrainer trainer;
+    private final MatrixManager matrixManager;
+
+    @Inject
+    public Application(final AbstractNeuralNetwork neuralNetwork, final NeuralNetworkTrainer trainer, final MatrixManager matrixManager) {
+        this.neuralNetwork = neuralNetwork;
+        this.trainer = trainer;
+        this.matrixManager = matrixManager;
+    }
+
+    public void run() {
         final Map<Matrix, Matrix> trainingData = new HashMap<>();
         final Random random = new Random();
 
@@ -32,11 +40,11 @@ public class Application {
 
         trainingData.forEach((inputs, targets) -> System.out.println(
                 "Inputs : \n" +
-                inputs +
-                "Neural network outputs : \n" +
-                trainer.feedForward(neuralNetwork, inputs) +
-                "Expected : \n" +
-                targets
+                        inputs +
+                        "Neural network outputs : \n" +
+                        trainer.feedForward(neuralNetwork, inputs) +
+                        "Expected : \n" +
+                        targets
         ));
     }
 }

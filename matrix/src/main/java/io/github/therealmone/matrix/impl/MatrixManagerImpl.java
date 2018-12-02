@@ -1,5 +1,6 @@
 package io.github.therealmone.matrix.impl;
 
+import com.google.inject.Inject;
 import io.github.therealmone.matrix.MatrixManager;
 import io.github.therealmone.matrix.model.Matrix;
 
@@ -7,6 +8,12 @@ import java.util.Random;
 import java.util.function.Function;
 
 public class MatrixManagerImpl implements MatrixManager {
+
+    @Inject
+    public MatrixManagerImpl() {
+
+    }
+
     @Override
     public Matrix matrixProduct(final Matrix firstMatrix, final Matrix secondMatrix) {
         if(firstMatrix.getColumnCount() != secondMatrix.getRowCount()){
