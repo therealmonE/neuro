@@ -8,6 +8,11 @@ import io.github.therealmone.model.Layer;
 import io.github.therealmone.model.Neuron;
 import io.github.therealmone.trainer.NeuralNetworkTrainer;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class NeuralNetworkTrainerImpl implements NeuralNetworkTrainer {
     private final MatrixManager matrixManager;
 
@@ -18,9 +23,12 @@ public class NeuralNetworkTrainerImpl implements NeuralNetworkTrainer {
 
     @Override
     public Matrix feedForward(final AbstractNeuralNetwork neuralNetwork, final Matrix inputs) {
-        return processNextLayer(neuralNetwork.getOutputLayer(),
-               processNextLayer(neuralNetwork.getHiddenLayer(),
-               processInputLayer(neuralNetwork.getInputLayer(), inputs)));
+        Matrix outputs = processInputLayer(neuralNetwork.getInputLayer(), inputs);
+        for (final Layer hiddenLayer : neuralNetwork.getHiddenLayers()) {
+            outputs = processNextLayer(hiddenLayer, outputs);
+        }
+        outputs = processNextLayer(neuralNetwork.getOutputLayer(), outputs);
+        return outputs;
     }
 
     private Matrix processNextLayer(final Layer layer, final Matrix inputs) {
@@ -57,16 +65,42 @@ public class NeuralNetworkTrainerImpl implements NeuralNetworkTrainer {
     @Override
     public void train(final AbstractNeuralNetwork neuralNetwork, final Matrix inputs, final Matrix targets, final double learningRate) {
         final Matrix inputLayerOutputs = processInputLayer(neuralNetwork.getInputLayer(), inputs);
-        final Matrix hiddenLayerOutputs = processNextLayer(neuralNetwork.getHiddenLayer(), inputLayerOutputs);
-        final Matrix outputLayerOutputs = processNextLayer(neuralNetwork.getOutputLayer(), hiddenLayerOutputs);
+        final List<Matrix> hiddenLayersOutputs = new ArrayList<>();
+        for(final Layer hiddenLayer : neuralNetwork.getHiddenLayers()) {
+            hiddenLayersOutputs.add(processNextLayer(hiddenLayer, hiddenLayersOutputs.size() == 0
+                    ? inputLayerOutputs
+                    : hiddenLayersOutputs.get(hiddenLayersOutputs.size() - 1)));
+        }
+        final Matrix outputLayerOutputs = processNextLayer(neuralNetwork.getOutputLayer(), hiddenLayersOutputs.get(hiddenLayersOutputs.size() - 1));
 
         final Matrix outputLayerErrors = getErrors(outputLayerOutputs, targets);
-        final Matrix hiddenLayerErrors = matrixManager.matrixProduct(
-                matrixManager.transpose(buildWeightMatrix(neuralNetwork.getOutputLayer())),
-                outputLayerErrors);
+        adjustWeightsAndBiases(
+                neuralNetwork.getOutputLayer(),
+                hiddenLayersOutputs.get(hiddenLayersOutputs.size() - 1),
+                outputLayerOutputs,
+                outputLayerErrors,
+                learningRate);
 
-        adjustWeightsAndBiases(neuralNetwork.getOutputLayer(), hiddenLayerOutputs, outputLayerOutputs, outputLayerErrors, learningRate);
-        adjustWeightsAndBiases(neuralNetwork.getHiddenLayer(), inputLayerOutputs, hiddenLayerOutputs, hiddenLayerErrors, learningRate);
+        assert hiddenLayersOutputs.size() == neuralNetwork.getHiddenLayers().size();
+
+        Matrix lastCalculatedErrors = outputLayerErrors;
+        for (int i = neuralNetwork.getHiddenLayers().size() - 1; i >= 0; i--) {
+            final Matrix weightMatrixFromNextLayer = i == neuralNetwork.getHiddenLayers().size() - 1
+                    ? buildWeightMatrix(neuralNetwork.getOutputLayer())
+                    : buildWeightMatrix(neuralNetwork.getHiddenLayers().get(i + 1));
+            lastCalculatedErrors = matrixManager.matrixProduct(matrixManager.transpose(weightMatrixFromNextLayer), lastCalculatedErrors);
+            final Matrix inputsForCurrentLayer = i != 0
+                    ? hiddenLayersOutputs.get(i - 1)
+                    : inputLayerOutputs;
+
+            adjustWeightsAndBiases(
+                    neuralNetwork.getHiddenLayers().get(i),
+                    inputsForCurrentLayer,
+                    hiddenLayersOutputs.get(i),
+                    lastCalculatedErrors,
+                    learningRate
+            );
+        }
     }
 
     private void adjustWeightsAndBiases(final Layer layer, final Matrix inputs, final Matrix outputs, final Matrix errors, final double learningRate) {

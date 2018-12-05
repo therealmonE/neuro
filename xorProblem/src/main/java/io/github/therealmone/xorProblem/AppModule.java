@@ -1,6 +1,7 @@
 package io.github.therealmone.xorProblem;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.name.Names;
 import io.github.therealmone.matrix.MatrixManager;
 import io.github.therealmone.matrix.impl.MatrixManagerImpl;
 import io.github.therealmone.model.AbstractNeuralNetwork;
@@ -14,5 +15,11 @@ public class AppModule extends AbstractModule {
         bind(MatrixManager.class).to(MatrixManagerImpl.class);
         bind(NeuralNetworkTrainer.class).to(NeuralNetworkTrainerImpl.class);
         bind(Application.class);
+
+        bind(Integer.class).annotatedWith(Names.named("CanvasWidth")).toInstance(500);
+        bind(Integer.class).annotatedWith(Names.named("CanvasHeight")).toInstance(500);
+        bind(Integer.class).annotatedWith(Names.named("PixelSize")).toInstance(5);
+        bind(Canvas.class);
+        bind(Window.class);
     }
 }

@@ -17,16 +17,16 @@ public class TestNeuralNetwork extends AbstractNeuralNetwork {
                         .setWeight(0, 1.0)
                         .setBias(0));
 
-        getHiddenLayer().addNeurons(2);
+        getHiddenLayers().get(0).addNeurons(2);
 
-        getHiddenLayer().getNeurons().get(0)
+        getHiddenLayers().get(0).getNeurons().get(0)
                 .setNumberOfInputs(2)
                 .setWeight(0, random.nextDouble() * 2 - 1)
                 .setWeight(1, random.nextDouble() * 2 - 1)
                 .setFunction(new SigmoidFunction())
                 .setBias(random.nextDouble() * 2 - 1);
 
-        getHiddenLayer().getNeurons().get(1)
+        getHiddenLayers().get(0).getNeurons().get(1)
                 .setNumberOfInputs(2)
                 .setWeight(0, random.nextDouble() * 2 - 1)
                 .setWeight(1, random.nextDouble() * 2 - 1)
